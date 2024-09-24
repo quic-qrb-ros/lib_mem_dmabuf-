@@ -24,7 +24,7 @@ public:
   bool sync_end();
   bool release();
   void set_auto_release(bool auto_release);
-  void set_destroy_callback(std::function<void(std::shared_ptr<DmaBuffer>)> cb);
+  void set_destroy_callback(std::function<void(DmaBuffer *)> cb);
   bool set_data(void * data, std::size_t size);
 
   int fd() const { return fd_; }
@@ -36,7 +36,7 @@ private:
   int size_{ 0 };
   void * addr_{ nullptr };
   bool auto_release_{ true };
-  std::function<void(std::shared_ptr<DmaBuffer>)> destroy_callback_{ nullptr };
+  std::function<void(DmaBuffer *)> destroy_callback_{ nullptr };
 };
 
 }  // namespace lib_mem_dmabuf

@@ -22,12 +22,10 @@ DmaBuffer::DmaBuffer(int fd, std::size_t size) : fd_(fd), size_(size) {}
 DmaBuffer::~DmaBuffer()
 {
   if (destroy_callback_ != nullptr) {
-    destroy_callback_(std::shared_ptr<DmaBuffer>(this));
+    destroy_callback_(this);
   }
-  if (auto_release_) {
-    if (!release()) {
-      std::cerr << "dma buffer release failed, fd: " << fd_ << ", size: " << size_ << std::endl;
-    }
+  if (auto_release_ && !release()) {
+    std::cerr << "dma buffer release failed, fd: " << fd_ << ", size: " << size_ << std::endl;
   }
 }
 
@@ -109,7 +107,7 @@ void DmaBuffer::set_auto_release(bool auto_release)
   auto_release_ = auto_release;
 }
 
-void DmaBuffer::set_destroy_callback(std::function<void(std::shared_ptr<DmaBuffer>)> cb)
+void DmaBuffer::set_destroy_callback(std::function<void(DmaBuffer *)> cb)
 {
   destroy_callback_ = cb;
 }

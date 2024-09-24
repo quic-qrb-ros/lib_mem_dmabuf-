@@ -26,6 +26,9 @@ TEST(dmabuf_transport, dmabuf_test)
   ASSERT_TRUE(ret);
 
   ASSERT_TRUE(buf->unmap());
+
+  auto fd = buf->fd();
+  buf->set_destroy_callback([fd](lib_mem_dmabuf::DmaBuffer * ptr) { ASSERT_EQ(ptr->fd(), fd); });
 }
 
 int main(int argc, char ** argv)
