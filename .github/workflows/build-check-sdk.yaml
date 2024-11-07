@@ -24,8 +24,20 @@ jobs:
             Y
           EOF
           else
-            echo "SDK is not available!!! Exit."
-            exit 1
+            echo "Downloading SDK from CLO..."
+            wget -q https://artifacts.codelinaro.org/artifactory/qli-ci/flashable-binaries/qirpsdk/qcs6490-rb3gen2-vision-kit/x86/qcom-6.6.38-QLI.1.2-Ver.1.1_robotics-product-sdk-1.1.zip
+            if [ $? != 0 ];then
+              Download SDK failed!!!. Exit!.
+              exit 2
+            fi
+            unzip qcom-6.6.38-QLI.1.2-Ver.1.1_robotics-product-sdk-1.1.zip
+            echo "Setting up SDK..."
+
+            umask 022
+            ./target/qcs6490-rb3gen2-vision-kit/sdk/qcom-robotics-ros2-humble-x86_64-qcom-robotics-full-image-armv8-2a-qcs6490-rb3gen2-vision-kit-toolchain-1.0.sh <<EOF
+            ${SDK_DIR}
+            Y
+          EOF
           fi
 
       - name: Checkout repo
